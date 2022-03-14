@@ -25,6 +25,12 @@ public class CreatePixKeyFilter {
     CreatePixKeyValidator validator;
 
     public void Validate(CreatePixKeyDTO createPixKeyDTO) throws ValidationException {
+        final String celularKeyTypeValue = "celular";
+        final String emailKeyTypeValue = "email";
+        final String cpfKeyTypeValue = "cpf";
+        final String cnpjKeyTypeValue = "cnpj";
+        final String aleatorioKeyTypeValue = "aleatorio";
+
         validator.checkKeyType(createPixKeyDTO.getKeyType());
         validator.checkGenericKeyValue(createPixKeyDTO.getKeyValue());
         validator.checkAccountType(createPixKeyDTO.getAccountType());
@@ -32,19 +38,19 @@ public class CreatePixKeyFilter {
         validator.checkAccountNumber(createPixKeyDTO.getAccountNumber());
         validator.checkPersonType(createPixKeyDTO.getPersonType());
 
-        if (createPixKeyDTO.getKeyType().equals("celular"))
+        if (createPixKeyDTO.getKeyType().equals(celularKeyTypeValue))
             validator.checkTelephoneNumber(createPixKeyDTO.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType().equals("email"))
+        if (createPixKeyDTO.getKeyType().equals(emailKeyTypeValue))
             validator.checkEmail(createPixKeyDTO.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType().equals("cpf"))
+        if (createPixKeyDTO.getKeyType().equals(cpfKeyTypeValue))
             validator.checkCPF(createPixKeyDTO.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType().equals("cnpj"))
+        if (createPixKeyDTO.getKeyType().equals(cnpjKeyTypeValue))
             validator.checkCNPJ(createPixKeyDTO.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType().equals("aleatorio"))
+        if (createPixKeyDTO.getKeyType().equals(aleatorioKeyTypeValue))
             validator.checkRandomKey(createPixKeyDTO.getKeyValue());
     }
 }
