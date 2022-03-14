@@ -27,8 +27,8 @@ public interface PixRepository extends JpaRepository<PixKey, String> {
             "(:datetimeInactivation is null or u.datetimeInactivation = :datetimeInactivation)")
     List<PixKey> findAllPixKey(
             @Param("keyType") String keyType,
-            @Param("agencyNumber") BigDecimal agencyNumber,
-            @Param("accountNumber") BigDecimal accountNumber,
+            @Param("agencyNumber") int agencyNumber,
+            @Param("accountNumber") int accountNumber,
             @Param("accountHolderName") String accountHolderName,
             @Param("datetimeInclusion") Date datetimeInclusion,
             @Param("datetimeInactivation") Date datetimeInactivation);

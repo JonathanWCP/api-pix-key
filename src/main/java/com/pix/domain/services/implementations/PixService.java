@@ -122,9 +122,9 @@ public class PixService implements IPixService {
     private PixKey buildPixKey(
             String keyType,
             String keyValue,
-            BigDecimal agencyNumber,
+            int agencyNumber,
             String accountType,
-            BigDecimal accountNumber,
+            int accountNumber,
             String accountHolderName,
             String accountHolderLastName,
             String personType

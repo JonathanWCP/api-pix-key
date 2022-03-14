@@ -35,7 +35,7 @@ public class PixController {
     }
 
     @PostMapping(path="/pix", produces=MediaType.APPLICATION_JSON_VALUE)
-    public String CreatePixKey(@Valid @RequestBody CreatePixKeyDTO createPixKeyDTO) throws Exception {
+    public String CreatePixKey(@RequestBody CreatePixKeyDTO createPixKeyDTO) throws Exception {
 
         createPixKeyFilter.Validate(createPixKeyDTO);
 
@@ -66,8 +66,8 @@ public class PixController {
     produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity GetPixKey(
             @RequestParam(name = "keyType") String keyType,
-            @RequestParam(name = "agencyNumber", required = false) BigDecimal agencyNumber,
-            @RequestParam(name = "accountNumber", required = false) BigDecimal accountNumber,
+            @RequestParam(name = "agencyNumber", required = false) int agencyNumber,
+            @RequestParam(name = "accountNumber", required = false) int accountNumber,
             @RequestParam(name = "accountHolderName", required = false) String accountHolderName,
             @RequestParam(name = "datetimeInclusion", required = false) Date datetimeInclusion,
             @RequestParam(name = "datetimeInactivation", required = false)  Date datetimeInactivation) throws PixKeyNotFoundException, PixKeyAlreadyDisableException
@@ -81,8 +81,8 @@ public class PixController {
 
     private GetPixKeyDTO buildGetPixKeyDTO(
             String keyType,
-            BigDecimal agencyNumber,
-            BigDecimal accountNumber,
+            int agencyNumber,
+            int accountNumber,
             String accountHolderName,
             Date datetimeInclusion,
             Date datetimeInactivation
@@ -99,8 +99,8 @@ public class PixController {
 
     private PixKey buildPixKey(
             String keyType,
-            BigDecimal agencyNumber,
-            BigDecimal accountNumber,
+            int agencyNumber,
+            int accountNumber,
             String accountHolderName,
             Date datetimeInclusion,
             Date datetimeInactivation

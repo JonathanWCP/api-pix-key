@@ -8,8 +8,8 @@ import java.sql.Date;
 @Data
 public class GetPixKeyDTO {
     private String keyType;
-    private BigDecimal agencyNumber;
-    private BigDecimal accountNumber;
+    private int agencyNumber;
+    private int accountNumber;
     private String accountHolderName;
     private Date datetimeInclusion;
     private Date datetimeInactivation;

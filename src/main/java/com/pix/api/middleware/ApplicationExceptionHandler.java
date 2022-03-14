@@ -3,6 +3,7 @@ package com.pix.api.middleware;
 import com.pix.domain.exceptions.PixKeyAlreadyDisableException;
 import com.pix.domain.exceptions.PixKeyAlreadyExistsException;
 import com.pix.domain.exceptions.PixKeyNotFoundException;
+import com.pix.domain.exceptions.ValidationException;
 import com.pix.domain.models.ResponseJSONMessage;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 
     @ExceptionHandler(PixKeyNotFoundException.class)
     public ResponseEntity handlePixKeyNotFoundException(Exception ex) {
-
         return new ResponseEntity(buildResponseMessage(404, ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(PixKeyAlreadyDisableException.class)
-    public ResponseEntity handlePixKeyAlreadyDisableException(Exception ex) {
+    public ResponseEntity<ResponseJSONMessage> handlePixKeyAlreadyDisableException(Exception ex) {
         return new ResponseEntity(buildResponseMessage(422, ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
@@ -30,6 +30,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         return new ResponseEntity(buildResponseMessage(403, ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(ValidationException.class)
     public ResponseEntity handleValidationException(Exception ex) {
         return new ResponseEntity(buildResponseMessage(422, ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }

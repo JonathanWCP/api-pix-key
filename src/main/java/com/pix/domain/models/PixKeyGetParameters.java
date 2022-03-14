@@ -8,8 +8,8 @@ import lombok.Data;
 public class PixKeyGetParameters {
     private String id;
     private String keyType;
-    private BigDecimal agencyNumber;
-    private BigDecimal accountNumber;
+    private int agencyNumber;
+    private int accountNumber;
     private String accountHolderName;
     private String accountHolderLastName;
     private Date datetimeInclusion;

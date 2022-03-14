@@ -1,5 +1,6 @@
 package com.pix.domain.services;
 
+import com.pix.MockBuilder;
 import com.pix.api.dto.CreatePixKeyDTO;
 import com.pix.api.dto.GetPixKeyDTO;
 import com.pix.api.dto.UpdatePixKeyDTO;
