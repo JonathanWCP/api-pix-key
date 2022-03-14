@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "62f7c980-199e-49d3-b091-fe77e799251e",
+		"name": "Pix",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiKey}}/healthcheck",
+					"host": [
+						"{{ApiKey}}"
+					],
+					"path": [
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Pix Key",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\t\"keyType\":\"celular\",\r\n\t\t\"keyValue\":\"+55011985497218\",\r\n\t\t\"accountType\":\"corrente\",\r\n\t\t\"agencyNumber\":\"1665\",\r\n\t\t\"accountNumber\":\"44651\",\r\n\t\t\"accountHolderName\":\"Jonathan Willian\",\r\n\t\t\"accountHolderLastName\":\"Castro Pinheiro\",\r\n        \"personType\": \"fisica\"\r\n\t}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ApiKey}}/pix",
+					"host": [
+						"{{ApiKey}}"
+					],
+					"path": [
+						"pix"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Pix Key",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"60727ff1-9e59-4cd1-bdcd-d1f67ace7b88\",\r\n    \"accountType\": \"corrente\",\r\n    \"agencyNumber\": \"1995\",\r\n    \"accountNumber\": \"87645\",\r\n    \"accountHolderName\": \"Guilherme\",\r\n    \"accountHolderLastName\": \"Gabanelli\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ApiKey}}/pix",
+					"host": [
+						"{{ApiKey}}"
+					],
+					"path": [
+						"pix"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inactivate Pix Key",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{ApiKey}}/pix/86f4a626-ea32-48e6-8621-4229865faf16",
+					"host": [
+						"{{ApiKey}}"
+					],
+					"path": [
+						"pix",
+						"86f4a626-ea32-48e6-8621-4229865faf16"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pix Key",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiKey}}/pix/5f869b3b-dfdc-4a94-9509-3aebabd15fa7",
+					"host": [
+						"{{ApiKey}}"
+					],
+					"path": [
+						"pix",
+						"5f869b3b-dfdc-4a94-9509-3aebabd15fa7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pix Key List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiKey}}/pix?keyType=email&accountHolderName=Maria",
+					"host": [
+						"{{ApiKey}}"
+					],
+					"path": [
+						"pix"
+					],
+					"query": [
+						{
+							"key": "keyType",
+							"value": "email"
+						},
+						{
+							"key": "accountHolderName",
+							"value": "Maria"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pix Key Limit Reach (Fisica)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\t\"keyType\":\"email\",\r\n\t\t\"keyValue\":\"maria@outroemail.com\",\r\n\t\t\"accountType\":\"corrente\",\r\n\t\t\"agencyNumber\":\"1546\",\r\n\t\t\"accountNumber\":\"1468543\",\r\n\t\t\"accountHolderName\":\"Maria\",\r\n\t\t\"accountHolderLastName\":\"Araujo\",\r\n        \"personType\": \"fisica\"\r\n\t}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ApiKey}}/pix",
+					"host": [
+						"{{ApiKey}}"
+					],
+					"path": [
+						"pix"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pix Key Limit Reach (Juridica)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\t\"keyType\":\"email\",\r\n\t\t\"keyValue\":\"jose@email.com\",\r\n\t\t\"accountType\":\"corrente\",\r\n\t\t\"agencyNumber\":\"1834\",\r\n\t\t\"accountNumber\":\"1548513\",\r\n\t\t\"accountHolderName\":\"Jose\",\r\n\t\t\"accountHolderLastName\":\"Santos\",\r\n        \"personType\": \"juridica\"\r\n\t}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ApiKey}}/pix",
+					"host": [
+						"{{ApiKey}}"
+					],
+					"path": [
+						"pix"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "ApiKey",
+			"value": "localhost:8080/api"
+		}
+	]
+}
