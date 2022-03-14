@@ -1,0 +1,9 @@
+services:
+    sql-server:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        restart: unless-stopped
+        environment: 
+            ACCEPT_EULA: Y
+            SA_PASSWORD: J0nathan
+        ports: 
+            - 1433:1433
