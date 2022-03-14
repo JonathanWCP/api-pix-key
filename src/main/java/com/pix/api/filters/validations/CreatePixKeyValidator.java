@@ -7,13 +7,16 @@ import java.math.BigDecimal;
 public class CreatePixKeyValidator {
 
     public void checkKeyType(String keyType) throws ValidationException {
+        if (stringIsNullOrEmpty(keyType))
+            throw new ValidationException("Key type must not be null!");
+
         if (!keyType.equals("celular") && !keyType.equals("email") && !keyType.equals("cpf")
                 && !keyType.equals("cnpj") && !keyType.equals("aleatorio"))
-            throw new ValidationException("Invalid KeyType! Must be 'celular', 'email', 'cpf', 'cnpj' or 'aleatorio'");
+            throw new ValidationException("Invalid Key type! Must be 'celular', 'email', 'cpf', 'cnpj' or 'aleatorio'");
     }
 
     public void checkAccountType(String accountType) throws ValidationException {
-        if (accountType == null || accountType.equals(""))
+        if (stringIsNullOrEmpty(accountType))
             throw new ValidationException("Account type should not be null or empty!");
 
         if (accountType.length() > 10)
@@ -24,7 +27,7 @@ public class CreatePixKeyValidator {
     }
 
     public void checkAgencyNumber(BigDecimal agencyNumber) throws ValidationException {
-        if (agencyNumber.equals(0))
+        if (bigDecimalIsNullOrZero(agencyNumber))
             throw new ValidationException("Agency number should not be null!");
 
         if (String.valueOf(agencyNumber).length() > 4)
@@ -32,11 +35,16 @@ public class CreatePixKeyValidator {
     }
 
     public void checkAccountNumber(BigDecimal accountNumber) throws ValidationException {
-        if (accountNumber.equals(0))
+        if (bigDecimalIsNullOrZero(accountNumber))
             throw new ValidationException("Account Number should not be null!");
 
         if (String.valueOf(accountNumber).length() > 8)
             throw new ValidationException("Account number must have a maximum length of 8 digits");
+    }
+
+    public void checkGenericKeyValue(String keyValue) throws ValidationException {
+        if (stringIsNullOrEmpty(keyValue))
+            throw new ValidationException("Key value must not be null or empty!");
     }
 
     public void checkTelephoneNumber(String telephoneNumber) throws ValidationException {
@@ -75,8 +83,27 @@ public class CreatePixKeyValidator {
     }
 
     public void checkPersonType(String personType) throws ValidationException {
+        if (stringIsNullOrEmpty(personType))
+            throw new ValidationException("Person type must not be null or empty!");
+
         if (!personType.equals("fisica") && !personType.equals("juridica"))
             throw new ValidationException("Person type must be 'fisica' or 'juridica'");
+    }
+
+    public void checkAccountHolderName(String name) throws ValidationException {
+        if (stringIsNullOrEmpty(name))
+            throw new ValidationException("Account holder name must not be null or empty!");
+
+        if (name.length() > 30)
+            throw new ValidationException("Account holder name must have a maximum length of 30 characters");
+    }
+
+    private boolean stringIsNullOrEmpty(String text) {
+        return text == null || text.equals("");
+    }
+
+    private boolean bigDecimalIsNullOrZero(BigDecimal number) {
+        return number == null || number.equals(new BigDecimal(0));
     }
 
     private boolean checkIfStringContainLetters(String text){

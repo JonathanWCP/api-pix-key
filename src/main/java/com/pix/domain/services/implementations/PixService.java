@@ -21,22 +21,26 @@ public class PixService implements IPixService {
 
     @Override
     public String CreatePixKey(PixKey pixKey) throws PixKeyAlreadyExistsException, PixKeyLimitReachedException {
+        final int maximumPixKeyForFisicaPersonType = 5;
+        final int maximumPixKeyForJuridicaPersonType = 20;
+
         Optional<Integer> keyValueExists = repository.findAllPixKeyByKeyValue(pixKey.getKeyValue());
         Optional<Integer> amountOfPixKeyByAccountNumber = repository.getAmountOfPixKey(pixKey.getAccountNumber());
 
-        if (keyValueExists.isPresent() && keyValueExists.get() > 0) {
-            throw new PixKeyAlreadyExistsException("The given pix key already exists!");
-        }
+        if (keyValueExists.isPresent()) {
+            if (keyValueExists.get() > 0) {
+                throw new PixKeyAlreadyExistsException("The given pix key already exists!");
+            }
 
-        if (pixKey.getPersonType().equals("fisica")) {
-            if (amountOfPixKeyByAccountNumber.get() >= 5)
-                throw new PixKeyLimitReachedException("Pix key creation limit is 5 keys for 'fisica' person type");
+            if (pixKey.getPersonType().equals("fisica")) {
+                if (amountOfPixKeyByAccountNumber.get() >= maximumPixKeyForFisicaPersonType)
+                    throw new PixKeyLimitReachedException("Pix key creation limit is 5 keys for 'fisica' person type");
+            }
+            else {
+                if (amountOfPixKeyByAccountNumber.get() >= maximumPixKeyForJuridicaPersonType)
+                    throw new PixKeyLimitReachedException("Pix key creation limit is 20 keys for 'juridica' person type");
+            }
         }
-        else {
-            if (amountOfPixKeyByAccountNumber.get() >= 20)
-                throw new PixKeyLimitReachedException("Pix key creation limit is 20 keys for 'juridica' person type");
-        }
-
 
         repository.saveAndFlush(pixKey);
         return pixKey.getId();

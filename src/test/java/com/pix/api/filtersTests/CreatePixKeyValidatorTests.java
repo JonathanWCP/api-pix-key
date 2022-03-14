@@ -5,8 +5,6 @@ import com.pix.api.filters.validations.CreatePixKeyValidator;
 import com.pix.domain.exceptions.ValidationException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -38,6 +36,20 @@ public class CreatePixKeyValidatorTests {
         // Act and Assert
         for(String keyType : validKeyTypes)
             unitUnderTests.checkKeyType(keyType);
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_KeyTypeIsNull() throws ValidationException {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkKeyType(null));
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_KeyTypeIsInvalid() throws ValidationException {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkKeyType("telefone"));
     }
 
     @Test
@@ -107,6 +119,13 @@ public class CreatePixKeyValidatorTests {
     }
 
     @Test
+    public void Should_ThrowValidationException_When_AgencyNumberIsNull() {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkAgencyNumber(null));
+    }
+
+    @Test
     public void Should_ValidateAccountNumber_WithSuccess_When_AccountNumberIsValid() throws ValidationException {
         // Act and Assert
         unitUnderTests.checkAccountNumber(new BigDecimal(16783458));
@@ -124,6 +143,20 @@ public class CreatePixKeyValidatorTests {
         // Act and Assert
         Assert.assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAccountNumber(new BigDecimal(165432168)));
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_AccountNumberISNull() {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkAccountNumber(null));
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_KeyValueIsNull() {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkGenericKeyValue(null));
     }
 
     @Test
@@ -151,6 +184,13 @@ public class CreatePixKeyValidatorTests {
         // Act and Assert
         Assert.assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkTelephoneNumber("+5501198549"));
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_TelephoneIsZero() {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkTelephoneNumber("0"));
     }
 
     @Test
@@ -279,4 +319,49 @@ public class CreatePixKeyValidatorTests {
         Assert.assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkPersonType(personType));
     }
+
+    @Test
+    public void Should_ThrowValidationException_When_PersonTypeIsNull() throws ValidationException {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkPersonType(null));
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_PersonTypeIsEmptyString() throws ValidationException {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkPersonType(""));
+    }
+
+    @Test
+    public void Should_ValidateAccountHolderName_WithSuccess_When_NameIsValid() throws ValidationException {
+        // Act and Assert
+        unitUnderTests.checkAccountHolderName("Jonathan");
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_NameIsNull() {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () ->  unitUnderTests.checkAccountHolderName(null));
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_NameIsEmpty() {
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () ->  unitUnderTests.checkAccountHolderName(""));
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_NameLengthIsBiggerThan30() {
+        // Arrange
+        String name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () ->  unitUnderTests.checkAccountHolderName(name));
+    }
+
 }

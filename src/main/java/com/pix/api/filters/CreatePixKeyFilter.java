@@ -26,9 +26,11 @@ public class CreatePixKeyFilter {
 
     public void Validate(CreatePixKeyDTO createPixKeyDTO) throws ValidationException {
         validator.checkKeyType(createPixKeyDTO.getKeyType());
+        validator.checkGenericKeyValue(createPixKeyDTO.getKeyValue());
         validator.checkAccountType(createPixKeyDTO.getAccountType());
         validator.checkAgencyNumber(createPixKeyDTO.getAgencyNumber());
         validator.checkAccountNumber(createPixKeyDTO.getAccountNumber());
+        validator.checkPersonType(createPixKeyDTO.getPersonType());
 
         if (createPixKeyDTO.getKeyType().equals("celular"))
             validator.checkTelephoneNumber(createPixKeyDTO.getKeyValue());
