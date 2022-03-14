@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
+
 @RunWith(SpringRunner.class)
 public class CreatePixKeyValidatorTests {
 
@@ -87,41 +89,41 @@ public class CreatePixKeyValidatorTests {
     @Test
     public void Should_ValidateAgencyNumber_WithSuccess_When_AgencyNumberIsValid() throws ValidationException {
         // Act and Assert
-        unitUnderTests.checkAgencyNumber(1665);
+        unitUnderTests.checkAgencyNumber(new BigDecimal(1665));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AgencyNumberIsInvalid()  {
         // Act and Assert
         Assert.assertThrows(ValidationException.class,
-                () -> unitUnderTests.checkAgencyNumber(0));
+                () -> unitUnderTests.checkAgencyNumber(new BigDecimal(0)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AgencyNumberIsGreaterThan4() {
         // Act and Assert
         Assert.assertThrows(ValidationException.class,
-                () -> unitUnderTests.checkAgencyNumber(16655));
+                () -> unitUnderTests.checkAgencyNumber(new BigDecimal(16655)));
     }
 
     @Test
     public void Should_ValidateAccountNumber_WithSuccess_When_AccountNumberIsValid() throws ValidationException {
         // Act and Assert
-        unitUnderTests.checkAccountNumber(16783458);
+        unitUnderTests.checkAccountNumber(new BigDecimal(16783458));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AccountNumberIsInvalid() {
         // Act and Assert
         Assert.assertThrows(ValidationException.class,
-                () -> unitUnderTests.checkAccountNumber(0));
+                () -> unitUnderTests.checkAccountNumber(new BigDecimal(0)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AccountNumberGreaterThan8() {
         // Act and Assert
         Assert.assertThrows(ValidationException.class,
-                () -> unitUnderTests.checkAccountNumber(165432168));
+                () -> unitUnderTests.checkAccountNumber(new BigDecimal(165432168)));
     }
 
     @Test
@@ -256,5 +258,25 @@ public class CreatePixKeyValidatorTests {
         // Act and Assert
         Assert.assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkRandomKey(randomKey));
+    }
+
+    @Test
+    public void Should_ValidatePersonType_WithSuccess_When_PersonTypeIsValid() throws ValidationException {
+        // Arrange
+        String[] personTypes = { "fisica", "juridica" };
+
+        // Act and Assert
+        for (String personType : personTypes)
+            unitUnderTests.checkPersonType(personType);
+    }
+
+    @Test
+    public void Should_ThrowValidationException_When_PersonTypeIsInvalid() throws ValidationException {
+        // Arrange
+        String personType = "humano";
+
+        // Act and Assert
+        Assert.assertThrows(ValidationException.class,
+                () -> unitUnderTests.checkPersonType(personType));
     }
 }

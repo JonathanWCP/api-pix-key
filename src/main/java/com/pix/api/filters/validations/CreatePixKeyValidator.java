@@ -2,6 +2,8 @@ package com.pix.api.filters.validations;
 
 import com.pix.domain.exceptions.ValidationException;
 
+import java.math.BigDecimal;
+
 public class CreatePixKeyValidator {
 
     public void checkKeyType(String keyType) throws ValidationException {
@@ -11,7 +13,7 @@ public class CreatePixKeyValidator {
     }
 
     public void checkAccountType(String accountType) throws ValidationException {
-        if (accountType == null || accountType == "")
+        if (accountType == null || accountType.equals(""))
             throw new ValidationException("Account type should not be null or empty!");
 
         if (accountType.length() > 10)
@@ -21,16 +23,16 @@ public class CreatePixKeyValidator {
             throw new ValidationException("Invalid account type values! Must be 'corrente' or 'poupanca'");
     }
 
-    public void checkAgencyNumber(int agencyNumber) throws ValidationException {
-        if (agencyNumber == 0)
+    public void checkAgencyNumber(BigDecimal agencyNumber) throws ValidationException {
+        if (agencyNumber.equals(0))
             throw new ValidationException("Agency number should not be null!");
 
         if (String.valueOf(agencyNumber).length() > 4)
             throw new ValidationException("Agency number must have a maximum length of 4 digits");
     }
 
-    public void checkAccountNumber(int accountNumber) throws ValidationException {
-        if (accountNumber == 0)
+    public void checkAccountNumber(BigDecimal accountNumber) throws ValidationException {
+        if (accountNumber.equals(0))
             throw new ValidationException("Account Number should not be null!");
 
         if (String.valueOf(accountNumber).length() > 8)
@@ -58,18 +60,23 @@ public class CreatePixKeyValidator {
     }
 
     public void checkCPF(String cpf) throws ValidationException {
-        if (cpf.length() < 11 || cpf.length() > 11)
+        if (cpf.length() != 11)
             throw new ValidationException("CPF length must contain 11 digits!");
     }
 
     public void checkCNPJ(String cnpj) throws ValidationException {
-        if (cnpj.length() < 14 || cnpj.length() > 14)
+        if (cnpj.length() != 14)
             throw new ValidationException("CNPJ length must contain 14 digits!");
     }
 
     public void checkRandomKey(String randomKey) throws ValidationException {
         if (randomKey.length() > 36)
             throw new ValidationException("Random key must have a maximum length of 36 characters");
+    }
+
+    public void checkPersonType(String personType) throws ValidationException {
+        if (!personType.equals("fisica") && !personType.equals("juridica"))
+            throw new ValidationException("Person type must be 'fisica' or 'juridica'");
     }
 
     private boolean checkIfStringContainLetters(String text){

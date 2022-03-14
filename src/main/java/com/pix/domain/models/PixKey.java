@@ -17,9 +17,9 @@ public class PixKey {
     private String id;
     private String keyType;
     private String keyValue;
-    private int agencyNumber;
+    private BigDecimal agencyNumber;
     private String accountType;
-    private int accountNumber;
+    private BigDecimal accountNumber;
     private String accountHolderName;
     private String accountHolderLastName;
     private String personType;

@@ -2,10 +2,7 @@ package com.pix.api.filters;
 
 import com.pix.api.dto.CreatePixKeyDTO;
 import com.pix.api.filters.validations.CreatePixKeyValidator;
-import com.pix.domain.exceptions.InvalidCpfException;
 import com.pix.domain.exceptions.ValidationException;
-import com.pix.domain.services.IPixService;
-import com.pix.domain.services.implementations.PixService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreatePixKeyFilter implements ICommandValidator<CreatePixKeyDTO> {
+public class CreatePixKeyFilter {
 
     @Configuration
     static class CreatePixKeyFilterContextConfiguration {
@@ -27,27 +24,25 @@ public class CreatePixKeyFilter implements ICommandValidator<CreatePixKeyDTO> {
     @Autowired
     CreatePixKeyValidator validator;
 
-    @Override
     public void Validate(CreatePixKeyDTO createPixKeyDTO) throws ValidationException {
         validator.checkKeyType(createPixKeyDTO.getKeyType());
         validator.checkAccountType(createPixKeyDTO.getAccountType());
         validator.checkAgencyNumber(createPixKeyDTO.getAgencyNumber());
         validator.checkAccountNumber(createPixKeyDTO.getAccountNumber());
 
-
-        if (createPixKeyDTO.getKeyType() == "celular")
+        if (createPixKeyDTO.getKeyType().equals("celular"))
             validator.checkTelephoneNumber(createPixKeyDTO.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType() == "email")
+        if (createPixKeyDTO.getKeyType().equals("email"))
             validator.checkEmail(createPixKeyDTO.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType() == "cpf")
+        if (createPixKeyDTO.getKeyType().equals("cpf"))
             validator.checkCPF(createPixKeyDTO.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType() == "cnpj")
+        if (createPixKeyDTO.getKeyType().equals("cnpj"))
             validator.checkCNPJ(createPixKeyDTO.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType() == "aleatorio")
-            validator.checkTelephoneNumber(createPixKeyDTO.getKeyValue());
+        if (createPixKeyDTO.getKeyType().equals("aleatorio"))
+            validator.checkRandomKey(createPixKeyDTO.getKeyValue());
     }
 }

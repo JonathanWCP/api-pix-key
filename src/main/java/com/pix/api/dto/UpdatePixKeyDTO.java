@@ -10,8 +10,8 @@ public class UpdatePixKeyDTO {
     @Id
     private String id;
     private String accountType;
-    private int agencyNumber;
-    private int accountNumber;
+    private BigDecimal agencyNumber;
+    private BigDecimal accountNumber;
     private String accountHolderName;
     private String accountHolderLastName;
 }

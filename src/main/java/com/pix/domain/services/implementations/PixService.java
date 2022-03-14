@@ -1,21 +1,17 @@
 package com.pix.domain.services.implementations;
 
-import com.pix.api.dto.CreatePixKeyDTO;
-import com.pix.api.dto.GetPixKeyDTO;
-import com.pix.api.dto.UpdatePixKeyDTO;
 import com.pix.domain.exceptions.PixKeyAlreadyDisableException;
 import com.pix.domain.exceptions.PixKeyAlreadyExistsException;
+import com.pix.domain.exceptions.PixKeyLimitReachedException;
 import com.pix.domain.exceptions.PixKeyNotFoundException;
 import com.pix.domain.models.PixKey;
 import com.pix.domain.repositories.PixRepository;
 import com.pix.domain.services.IPixService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class PixService implements IPixService {
@@ -24,39 +20,39 @@ public class PixService implements IPixService {
     private PixRepository repository;
 
     @Override
-    public String CreatePixKey(CreatePixKeyDTO createPixKeyDTO) throws PixKeyAlreadyExistsException {
-        Optional<Integer> keyValueExists = repository.findAllPixKeyByKeyValue(createPixKeyDTO.getKeyValue());
+    public String CreatePixKey(PixKey pixKey) throws PixKeyAlreadyExistsException, PixKeyLimitReachedException {
+        Optional<Integer> keyValueExists = repository.findAllPixKeyByKeyValue(pixKey.getKeyValue());
+        Optional<Integer> amountOfPixKeyByAccountNumber = repository.getAmountOfPixKey(pixKey.getAccountNumber());
 
         if (keyValueExists.isPresent() && keyValueExists.get() > 0) {
             throw new PixKeyAlreadyExistsException("The given pix key already exists!");
         }
-        else {
-            PixKey pixKey =  buildPixKey(
-                    createPixKeyDTO.getKeyType(),
-                    createPixKeyDTO.getKeyValue(),
-                    createPixKeyDTO.getAgencyNumber(),
-                    createPixKeyDTO.getAccountType(),
-                    createPixKeyDTO.getAccountNumber(),
-                    createPixKeyDTO.getAccountHolderName(),
-                    createPixKeyDTO.getAccountHolderLastName(),
-                    createPixKeyDTO.getPersonType());
 
-            repository.saveAndFlush(pixKey);
-            return pixKey.getId();
+        if (pixKey.getPersonType().equals("fisica")) {
+            if (amountOfPixKeyByAccountNumber.get() >= 5)
+                throw new PixKeyLimitReachedException("Pix key creation limit is 5 keys for 'fisica' person type");
         }
+        else {
+            if (amountOfPixKeyByAccountNumber.get() >= 20)
+                throw new PixKeyLimitReachedException("Pix key creation limit is 20 keys for 'juridica' person type");
+        }
+
+
+        repository.saveAndFlush(pixKey);
+        return pixKey.getId();
     }
 
     @Override
-    public PixKey UpdatePixKey(UpdatePixKeyDTO updatePixKeyDTO) throws PixKeyNotFoundException, PixKeyAlreadyDisableException {
-        Optional<PixKey> pixKeyEntity = repository.findById(updatePixKeyDTO.getId());
+    public PixKey UpdatePixKey(PixKey pixKey) throws PixKeyNotFoundException, PixKeyAlreadyDisableException {
+        Optional<PixKey> pixKeyEntity = repository.findById(pixKey.getId());
 
         if (pixKeyEntity.isPresent()) {
             if (pixKeyEntity.get().getDatetimeInactivation() == null) {
-                pixKeyEntity.get().setAccountType(updatePixKeyDTO.getAccountType());
-                pixKeyEntity.get().setAgencyNumber(updatePixKeyDTO.getAgencyNumber());
-                pixKeyEntity.get().setAccountNumber(updatePixKeyDTO.getAccountNumber());
-                pixKeyEntity.get().setAccountHolderName(updatePixKeyDTO.getAccountHolderName());
-                pixKeyEntity.get().setAccountHolderLastName(updatePixKeyDTO.getAccountHolderLastName());
+                pixKeyEntity.get().setAccountType(pixKey.getAccountType());
+                pixKeyEntity.get().setAgencyNumber(pixKey.getAgencyNumber());
+                pixKeyEntity.get().setAccountNumber(pixKey.getAccountNumber());
+                pixKeyEntity.get().setAccountHolderName(pixKey.getAccountHolderName());
+                pixKeyEntity.get().setAccountHolderLastName(pixKey.getAccountHolderLastName());
 
                 repository.saveAndFlush(pixKeyEntity.get());
                 return pixKeyEntity.get();
@@ -103,44 +99,19 @@ public class PixService implements IPixService {
     }
 
     @Override
-    public List<PixKey> GetPixKeys(GetPixKeyDTO getPixKeyDTO) throws PixKeyNotFoundException {
+    public List<PixKey> GetPixKeys(PixKey pixKey) throws PixKeyNotFoundException {
         List<PixKey> pixKeys = repository.findAllPixKey(
-                getPixKeyDTO.getKeyType(),
-                getPixKeyDTO.getAgencyNumber(),
-                getPixKeyDTO.getAccountNumber(),
-                getPixKeyDTO.getAccountHolderName(),
-                getPixKeyDTO.getDatetimeInclusion(),
-                getPixKeyDTO.getDatetimeInactivation());
+                pixKey.getKeyType(),
+                pixKey.getAgencyNumber(),
+                pixKey.getAccountNumber(),
+                pixKey.getAccountHolderName(),
+                pixKey.getDatetimeInclusion(),
+                pixKey.getDatetimeInactivation());
 
         if (pixKeys.size() == 0) {
             throw new PixKeyNotFoundException("The given pix key was not found!");
         }
 
         return pixKeys;
-    }
-
-    private PixKey buildPixKey(
-            String keyType,
-            String keyValue,
-            int agencyNumber,
-            String accountType,
-            int accountNumber,
-            String accountHolderName,
-            String accountHolderLastName,
-            String personType
-    ) {
-        PixKey pixKey = new PixKey();
-
-        pixKey.setId(UUID.randomUUID().toString());
-        pixKey.setKeyType(keyType);
-        pixKey.setKeyValue(keyValue);
-        pixKey.setAgencyNumber(agencyNumber);
-        pixKey.setAccountType(accountType);
-        pixKey.setAccountNumber(accountNumber);
-        pixKey.setAccountHolderName(accountHolderName);
-        pixKey.setAccountHolderLastName(accountHolderLastName);
-        pixKey.setDatetimeInclusion(new Date(System.currentTimeMillis()));
-        pixKey.setPersonType(personType);
-        return pixKey;
     }
 }

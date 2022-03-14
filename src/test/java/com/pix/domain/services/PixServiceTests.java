@@ -1,11 +1,9 @@
 package com.pix.domain.services;
 
 import com.pix.MockBuilder;
-import com.pix.api.dto.CreatePixKeyDTO;
-import com.pix.api.dto.GetPixKeyDTO;
-import com.pix.api.dto.UpdatePixKeyDTO;
 import com.pix.domain.exceptions.PixKeyAlreadyDisableException;
 import com.pix.domain.exceptions.PixKeyAlreadyExistsException;
+import com.pix.domain.exceptions.PixKeyLimitReachedException;
 import com.pix.domain.exceptions.PixKeyNotFoundException;
 import com.pix.domain.models.PixKey;
 import com.pix.domain.repositories.PixRepository;
@@ -49,49 +47,72 @@ public class PixServiceTests {
     private MockBuilder mockBuilder;
 
     private PixKey pixKey;
-    private CreatePixKeyDTO createPixKeyDTO;
-    private UpdatePixKeyDTO updatePixKeyDTO;
-    private GetPixKeyDTO getPixKeyDTO;
 
 
     @Before
     public void setUp() {
         pixKey = mockBuilder.GeneratePixKeyObject();
-        createPixKeyDTO = mockBuilder.GenerateCreatePixKeyObject();
-        updatePixKeyDTO = mockBuilder.GenerateUpdatePixKeyDTOObject();
-        getPixKeyDTO = mockBuilder.GenerateGetPixKeyDTOObject();
         MockRepositoryBuilder();
     }
 
     @Test
-    public void Should_CreatePixKey_When_UsingValidPixKey() throws PixKeyAlreadyExistsException {
+    public void Should_CreatePixKey_When_UsingValidPixKey() throws PixKeyAlreadyExistsException, PixKeyLimitReachedException {
         // Arrange
-        Mockito.when(mockRepository.findAllPixKeyByKeyValue(createPixKeyDTO.getKeyValue()))
+        Mockito.when(mockRepository.findAllPixKeyByKeyValue(pixKey.getKeyValue()))
                 .thenReturn(Optional.empty());
+        Mockito.when(mockRepository.getAmountOfPixKey(pixKey.getAccountNumber()))
+                .thenReturn(Optional.of(2));
 
         // Act
-        unitUnderTests.CreatePixKey(createPixKeyDTO);
+        unitUnderTests.CreatePixKey(pixKey);
     }
 
     @Test
     public void Should_ThrowPixKeyAlreadyExistsException_When_PixKeyAlreadyExists() {
         // Arrange
-        Mockito.when(mockRepository.findAllPixKeyByKeyValue(createPixKeyDTO.getKeyValue()))
+        Mockito.when(mockRepository.findAllPixKeyByKeyValue(pixKey.getKeyValue()))
                 .thenReturn(Optional.of(2));
 
         // Act and Assert
         Assert.assertThrows(PixKeyAlreadyExistsException.class,
-                () -> unitUnderTests.CreatePixKey(createPixKeyDTO));
+                () -> unitUnderTests.CreatePixKey(pixKey));
+    }
+
+    @Test
+    public void Should_ThrowPixKeyLimitReachedException_When_LimitIsReachedForFisicaPersonType() {
+        // Arrange
+        Mockito.when(mockRepository.findAllPixKeyByKeyValue(pixKey.getKeyValue()))
+                .thenReturn(Optional.empty());
+        Mockito.when(mockRepository.getAmountOfPixKey(pixKey.getAccountNumber()))
+                .thenReturn(Optional.of(5));
+
+        // Act and Assert
+        Assert.assertThrows(PixKeyLimitReachedException.class,
+                () -> unitUnderTests.CreatePixKey(pixKey));
+    }
+
+    @Test
+    public void Should_ThrowPixKeyLimitReachedException_When_LimitIsReachedForJuridicaPersonType() {
+        // Arrange
+        pixKey.setPersonType("juridica");
+        Mockito.when(mockRepository.findAllPixKeyByKeyValue(pixKey.getKeyValue()))
+                .thenReturn(Optional.empty());
+        Mockito.when(mockRepository.getAmountOfPixKey(pixKey.getAccountNumber()))
+                .thenReturn(Optional.of(20));
+
+        // Act and Assert
+        Assert.assertThrows(PixKeyLimitReachedException.class,
+                () -> unitUnderTests.CreatePixKey(pixKey));
     }
 
     @Test
     public void Should_UpdatePixKey_When_UsingExistingPixKey() throws PixKeyNotFoundException, PixKeyAlreadyDisableException {
         // Arrange
-        Mockito.when(mockRepository.findById(updatePixKeyDTO.getId()))
+        Mockito.when(mockRepository.findById(pixKey.getId()))
                 .thenReturn(Optional.of(pixKey));
 
         // Act
-        PixKey result = unitUnderTests.UpdatePixKey(updatePixKeyDTO);
+        PixKey result = unitUnderTests.UpdatePixKey(pixKey);
 
         // Assert
         Assert.assertNotNull(result);
@@ -101,21 +122,21 @@ public class PixServiceTests {
     public void Should_ThrowPixKeyAlreadyDisableException_When_UpdatingWithPixKeyAlreadyDisable() {
         // Arrange
         pixKey.setDatetimeInactivation(new Date(System.currentTimeMillis()));
-        Mockito.when(mockRepository.findById(updatePixKeyDTO.getId()))
+        Mockito.when(mockRepository.findById(pixKey.getId()))
                 .thenReturn(Optional.of(pixKey));
 
         // Act and Assert
         Assert.assertThrows(PixKeyAlreadyDisableException.class,
-                () -> unitUnderTests.UpdatePixKey(updatePixKeyDTO));
+                () -> unitUnderTests.UpdatePixKey(pixKey));
     }
 
     @Test
     public void Should_ThrowPixKeyNotFoundException_When_UpdatingWithNotExistingPixKey()  {
         // Arrange
-        Mockito.when(mockRepository.findById(updatePixKeyDTO.getId())).thenReturn(Optional.empty());
+        Mockito.when(mockRepository.findById(pixKey.getId())).thenReturn(Optional.empty());
 
         // Act and Assert
-        Assert.assertThrows(PixKeyNotFoundException.class, () -> unitUnderTests.UpdatePixKey(updatePixKeyDTO));
+        Assert.assertThrows(PixKeyNotFoundException.class, () -> unitUnderTests.UpdatePixKey(pixKey));
     }
 
     @Test
@@ -180,16 +201,16 @@ public class PixServiceTests {
     public void Should_ReturnPixKeyList_When_UsingCustomRepositoryWithValidPixKey() throws PixKeyAlreadyDisableException, PixKeyNotFoundException {
         // Arrange
         Mockito.when(mockRepository.findAllPixKey(
-                getPixKeyDTO.getKeyType(),
-                getPixKeyDTO.getAgencyNumber(),
-                getPixKeyDTO.getAccountNumber(),
-                getPixKeyDTO.getAccountHolderName(),
-                getPixKeyDTO.getDatetimeInclusion(),
-                getPixKeyDTO.getDatetimeInactivation()))
+                pixKey.getKeyType(),
+                pixKey.getAgencyNumber(),
+                pixKey.getAccountNumber(),
+                pixKey.getAccountHolderName(),
+                pixKey.getDatetimeInclusion(),
+                pixKey.getDatetimeInactivation()))
                     .thenReturn(mockBuilder.GeneratePixKeyListObject());
 
         // Act
-        List<PixKey> result = unitUnderTests.GetPixKeys(getPixKeyDTO);
+        List<PixKey> result = unitUnderTests.GetPixKeys(pixKey);
 
         // Assert
         Assert.assertNotNull(result);
@@ -200,17 +221,17 @@ public class PixServiceTests {
         // Arrange
         List<PixKey> mockList = new ArrayList<>();
         Mockito.when(mockRepository.findAllPixKey(
-                        getPixKeyDTO.getKeyType(),
-                        getPixKeyDTO.getAgencyNumber(),
-                        getPixKeyDTO.getAccountNumber(),
-                        getPixKeyDTO.getAccountHolderName(),
-                        getPixKeyDTO.getDatetimeInclusion(),
-                        getPixKeyDTO.getDatetimeInactivation()))
+                        pixKey.getKeyType(),
+                        pixKey.getAgencyNumber(),
+                        pixKey.getAccountNumber(),
+                        pixKey.getAccountHolderName(),
+                        pixKey.getDatetimeInclusion(),
+                        pixKey.getDatetimeInactivation()))
                 .thenReturn(mockList);
 
         // Act
         Assert.assertThrows(PixKeyNotFoundException.class,
-                () -> unitUnderTests.GetPixKeys(getPixKeyDTO));
+                () -> unitUnderTests.GetPixKeys(pixKey));
     }
 
     private void MockRepositoryBuilder() {
