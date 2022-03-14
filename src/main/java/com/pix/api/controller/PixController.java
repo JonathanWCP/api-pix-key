@@ -43,7 +43,7 @@ public class PixController {
     private ResponseJSONMessage response;
 
 
-    @GetMapping(path="/healthcheck", produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/healthcheck")
     public ResponseEntity<String> healthCheck() {
         return new ResponseEntity<>("Ok", HttpStatus.OK);
     }
