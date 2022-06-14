@@ -8,49 +8,36 @@ import com.pix.domain.exceptions.PixKeyNotFoundException;
 import com.pix.domain.models.PixKey;
 import com.pix.domain.repositories.PixRepository;
 import com.pix.domain.services.implementations.PixService;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RunWith(SpringRunner.class)
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+
+@RunWith(MockitoJUnitRunner.class)
 public class PixServiceTests {
 
-    @TestConfiguration
-    static class PixServiceImplTestContextConfiguration {
-        @Bean
-        public IPixService pixService() {
-            return new PixService();
-        }
+    @InjectMocks
+    private PixService unitUnderTests;
 
-        @Bean
-        public MockBuilder mockBuilder() {return new MockBuilder(); }
-    }
-
-    @Autowired
-    private IPixService unitUnderTests;
-
-    @MockBean
+    @Mock
     private PixRepository mockRepository;
-
-    @Autowired
     private MockBuilder mockBuilder;
-
     private PixKey pixKey;
 
 
     @Before
     public void setUp() {
+        mockBuilder = new MockBuilder();
         pixKey = mockBuilder.GeneratePixKeyObject();
         MockRepositoryBuilder();
     }
@@ -74,7 +61,7 @@ public class PixServiceTests {
                 .thenReturn(Optional.of(2));
 
         // Act and Assert
-        Assert.assertThrows(PixKeyAlreadyExistsException.class,
+        assertThrows(PixKeyAlreadyExistsException.class,
                 () -> unitUnderTests.CreatePixKey(pixKey));
     }
 
@@ -82,12 +69,12 @@ public class PixServiceTests {
     public void Should_ThrowPixKeyLimitReachedException_When_LimitIsReachedForFisicaPersonType() {
         // Arrange
         Mockito.when(mockRepository.findAllPixKeyByKeyValue(pixKey.getKeyValue()))
-                .thenReturn(Optional.empty());
+                .thenReturn(Optional.of(0));
         Mockito.when(mockRepository.getAmountOfPixKey(pixKey.getAccountNumber()))
                 .thenReturn(Optional.of(5));
 
         // Act and Assert
-        Assert.assertThrows(PixKeyLimitReachedException.class,
+        assertThrows(PixKeyLimitReachedException.class,
                 () -> unitUnderTests.CreatePixKey(pixKey));
     }
 
@@ -96,12 +83,12 @@ public class PixServiceTests {
         // Arrange
         pixKey.setPersonType("juridica");
         Mockito.when(mockRepository.findAllPixKeyByKeyValue(pixKey.getKeyValue()))
-                .thenReturn(Optional.empty());
+                .thenReturn(Optional.of(0));
         Mockito.when(mockRepository.getAmountOfPixKey(pixKey.getAccountNumber()))
                 .thenReturn(Optional.of(20));
 
         // Act and Assert
-        Assert.assertThrows(PixKeyLimitReachedException.class,
+        assertThrows(PixKeyLimitReachedException.class,
                 () -> unitUnderTests.CreatePixKey(pixKey));
     }
 
@@ -115,7 +102,7 @@ public class PixServiceTests {
         PixKey result = unitUnderTests.UpdatePixKey(pixKey);
 
         // Assert
-        Assert.assertNotNull(result);
+        assertNotNull(result);
     }
 
     @Test
@@ -126,7 +113,7 @@ public class PixServiceTests {
                 .thenReturn(Optional.of(pixKey));
 
         // Act and Assert
-        Assert.assertThrows(PixKeyAlreadyDisableException.class,
+        assertThrows(PixKeyAlreadyDisableException.class,
                 () -> unitUnderTests.UpdatePixKey(pixKey));
     }
 
@@ -136,7 +123,7 @@ public class PixServiceTests {
         Mockito.when(mockRepository.findById(pixKey.getId())).thenReturn(Optional.empty());
 
         // Act and Assert
-        Assert.assertThrows(PixKeyNotFoundException.class, () -> unitUnderTests.UpdatePixKey(pixKey));
+        assertThrows(PixKeyNotFoundException.class, () -> unitUnderTests.UpdatePixKey(pixKey));
     }
 
     @Test
@@ -149,7 +136,7 @@ public class PixServiceTests {
         PixKey result = unitUnderTests.InactivatePixKey(pixKey.getId());
 
         // Assert
-        Assert.assertNotNull(result);
+        assertNotNull(result);
     }
 
     @Test
@@ -159,7 +146,7 @@ public class PixServiceTests {
                 .thenReturn(Optional.empty());
 
         // Act and Assert
-        Assert.assertThrows(PixKeyNotFoundException.class,
+        assertThrows(PixKeyNotFoundException.class,
                 () -> unitUnderTests.InactivatePixKey(pixKey.getId()));
     }
 
@@ -171,7 +158,7 @@ public class PixServiceTests {
                 .thenReturn(Optional.ofNullable(pixKey));
 
         // Act and Assert
-        Assert.assertThrows(PixKeyAlreadyDisableException.class,
+        assertThrows(PixKeyAlreadyDisableException.class,
                 () -> unitUnderTests.InactivatePixKey(pixKey.getId()));
     }
 
@@ -193,7 +180,7 @@ public class PixServiceTests {
                 .thenReturn(Optional.empty());
 
         // Act
-        Assert.assertThrows(PixKeyNotFoundException.class,
+        assertThrows(PixKeyNotFoundException.class,
                 () -> unitUnderTests.GetPixKey(pixKey.getId()));
     }
 
@@ -213,7 +200,7 @@ public class PixServiceTests {
         List<PixKey> result = unitUnderTests.GetPixKeys(pixKey);
 
         // Assert
-        Assert.assertNotNull(result);
+        assertNotNull(result);
     }
 
     @Test
@@ -230,7 +217,7 @@ public class PixServiceTests {
                 .thenReturn(mockList);
 
         // Act
-        Assert.assertThrows(PixKeyNotFoundException.class,
+        assertThrows(PixKeyNotFoundException.class,
                 () -> unitUnderTests.GetPixKeys(pixKey));
     }
 

@@ -1,6 +1,7 @@
 package com.pix.api.controller;
 
 import com.pix.api.dto.CreatePixKeyDTO;
+import com.pix.api.dto.GetPixKeyDTO;
 import com.pix.api.dto.UpdatePixKeyDTO;
 import com.pix.api.filters.CreatePixKeyFilter;
 import com.pix.domain.exceptions.PixKeyAlreadyDisableException;
@@ -80,7 +81,18 @@ public class PixController {
     }
 
     @GetMapping(path="/pix", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity GetPixKey(
+    public ResponseEntity GetPixKey(@RequestBody GetPixKeyDTO getPixKeyDTO) throws PixKeyNotFoundException, PixKeyAlreadyDisableException
+    {
+        PixKey pixKey = buildPixKey(getPixKeyDTO);
+
+        List<PixKey> response = pixService.GetPixKeys(pixKey);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping(path="/pixv2", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity GetPixKeyV2(
             @RequestParam(name = "keyType") String keyType,
             @RequestParam(name = "agencyNumber", required = false) BigDecimal agencyNumber,
             @RequestParam(name = "accountNumber", required = false) BigDecimal accountNumber,
@@ -98,7 +110,7 @@ public class PixController {
     private PixKey buildPixKey(CreatePixKeyDTO createPixKeyDTO) {
         PixKey pixKey = new PixKey();
         pixKey.setId(UUID.randomUUID().toString());
-        pixKey.setKeyType(createPixKeyDTO.getKeyType());
+        pixKey.setKeyType(createPixKeyDTO.getKeyType().getValue());
         pixKey.setKeyValue(createPixKeyDTO.getKeyValue());
         pixKey.setAgencyNumber(createPixKeyDTO.getAgencyNumber());
         pixKey.setAccountType(createPixKeyDTO.getAccountType());
@@ -123,6 +135,20 @@ public class PixController {
 
         return pixKey;
     }
+
+    private PixKey buildPixKey(GetPixKeyDTO getPixKeyDTO) {
+        PixKey pixKey = new PixKey();
+
+        pixKey.setKeyType(getPixKeyDTO.getKeyType());
+        pixKey.setAgencyNumber(getPixKeyDTO.getAgencyNumber());
+        pixKey.setAccountNumber(getPixKeyDTO.getAccountNumber());
+        pixKey.setAccountHolderName(getPixKeyDTO.getAccountHolderName());
+        pixKey.setDatetimeInclusion(getPixKeyDTO.getDatetimeInclusion());
+        pixKey.setDatetimeInactivation(getPixKeyDTO.getDatetimeInactivation());
+
+        return pixKey;
+    }
+
 
     private PixKey buildPixKey(
             String keyType,

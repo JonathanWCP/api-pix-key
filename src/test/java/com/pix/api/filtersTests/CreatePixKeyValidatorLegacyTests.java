@@ -1,32 +1,21 @@
 package com.pix.api.filtersTests;
 
-import com.pix.MockBuilder;
-import com.pix.api.filters.validations.CreatePixKeyValidator;
+import com.pix.api.filters.validations.CreatePixKeyValidatorLegacy;
 import com.pix.domain.exceptions.ValidationException;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 
-@RunWith(SpringRunner.class)
-public class CreatePixKeyValidatorTests {
+import static org.junit.Assert.assertThrows;
 
-    @TestConfiguration
-    static class CreatePixKeyFilterTestContextConfiguration {
-        @Bean
-        public CreatePixKeyValidator createPixKeyFilter() { return new CreatePixKeyValidator(); }
+@RunWith(MockitoJUnitRunner.class)
+public class CreatePixKeyValidatorLegacyTests {
 
-        @Bean
-        public MockBuilder mockBuilder() {return new MockBuilder(); }
-    }
-
-    @Autowired
-    private CreatePixKeyValidator unitUnderTests;
+    @InjectMocks
+    private CreatePixKeyValidatorLegacy unitUnderTests;
 
     @Test
     public void Should_ValidateKeyType_WithSuccess_When_KeyTypeIsValid() throws ValidationException {
@@ -41,14 +30,14 @@ public class CreatePixKeyValidatorTests {
     @Test
     public void Should_ThrowValidationException_When_KeyTypeIsNull() throws ValidationException {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkKeyType(null));
     }
 
     @Test
     public void Should_ThrowValidationException_When_KeyTypeIsInvalid() throws ValidationException {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkKeyType("telefone"));
     }
 
@@ -67,14 +56,14 @@ public class CreatePixKeyValidatorTests {
     @Test
     public void Should_ThrowValidationException_When_AccountTypeIsNull() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAccountType(null));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AccountTypeIsEmptyString() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAccountType(""));
     }
 
@@ -84,7 +73,7 @@ public class CreatePixKeyValidatorTests {
         String accountType = "correnteeee";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAccountType(accountType));
     }
 
@@ -94,7 +83,7 @@ public class CreatePixKeyValidatorTests {
         String accountType = "salario";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAccountType(accountType));
     }
 
@@ -107,21 +96,21 @@ public class CreatePixKeyValidatorTests {
     @Test
     public void Should_ThrowValidationException_When_AgencyNumberIsInvalid()  {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAgencyNumber(new BigDecimal(0)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AgencyNumberIsGreaterThan4() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAgencyNumber(new BigDecimal(16655)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AgencyNumberIsNull() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAgencyNumber(null));
     }
 
@@ -134,28 +123,28 @@ public class CreatePixKeyValidatorTests {
     @Test
     public void Should_ThrowValidationException_When_AccountNumberIsInvalid() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAccountNumber(new BigDecimal(0)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AccountNumberGreaterThan8() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAccountNumber(new BigDecimal(165432168)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AccountNumberISNull() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkAccountNumber(null));
     }
 
     @Test
     public void Should_ThrowValidationException_When_KeyValueIsNull() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkGenericKeyValue(null));
     }
 
@@ -168,28 +157,28 @@ public class CreatePixKeyValidatorTests {
     @Test
     public void Should_ThrowValidationException_When_TelephoneNotContainCodeArea() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkTelephoneNumber("01198549721J"));
     }
 
     @Test
     public void Should_ThrowValidationException_When_TelephoneContainLetters() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkTelephoneNumber("+5501198549721J"));
     }
 
     @Test
     public void Should_ThrowValidationException_When_TelephoneLengthIsLessThan15() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkTelephoneNumber("+5501198549"));
     }
 
     @Test
     public void Should_ThrowValidationException_When_TelephoneIsZero() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkTelephoneNumber("0"));
     }
 
@@ -208,7 +197,7 @@ public class CreatePixKeyValidatorTests {
         String email = "jonathanwc.pinheiro";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkEmail(email));
     }
 
@@ -219,7 +208,7 @@ public class CreatePixKeyValidatorTests {
                 "@outlok.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkEmail(email));
     }
 
@@ -238,7 +227,7 @@ public class CreatePixKeyValidatorTests {
         String cpf = "2222222225";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkCPF(cpf));
     }
 
@@ -248,7 +237,7 @@ public class CreatePixKeyValidatorTests {
         String cpf = "222222222556";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkCPF(cpf));
     }
 
@@ -267,7 +256,7 @@ public class CreatePixKeyValidatorTests {
         String cnpj = "22222222";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkCNPJ(cnpj));
     }
 
@@ -277,7 +266,7 @@ public class CreatePixKeyValidatorTests {
         String cnpj = "2222222225547846";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkCNPJ(cnpj));
     }
 
@@ -296,7 +285,7 @@ public class CreatePixKeyValidatorTests {
         String randomKey = "983141554544156464646446464685474946854164461354535";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkRandomKey(randomKey));
     }
 
@@ -316,21 +305,21 @@ public class CreatePixKeyValidatorTests {
         String personType = "humano";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkPersonType(personType));
     }
 
     @Test
     public void Should_ThrowValidationException_When_PersonTypeIsNull() throws ValidationException {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkPersonType(null));
     }
 
     @Test
     public void Should_ThrowValidationException_When_PersonTypeIsEmptyString() throws ValidationException {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () -> unitUnderTests.checkPersonType(""));
     }
 
@@ -343,14 +332,14 @@ public class CreatePixKeyValidatorTests {
     @Test
     public void Should_ThrowValidationException_When_NameIsNull() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () ->  unitUnderTests.checkAccountHolderName(null));
     }
 
     @Test
     public void Should_ThrowValidationException_When_NameIsEmpty() {
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () ->  unitUnderTests.checkAccountHolderName(""));
     }
 
@@ -360,7 +349,7 @@ public class CreatePixKeyValidatorTests {
         String name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
         // Act and Assert
-        Assert.assertThrows(ValidationException.class,
+        assertThrows(ValidationException.class,
                 () ->  unitUnderTests.checkAccountHolderName(name));
     }
 

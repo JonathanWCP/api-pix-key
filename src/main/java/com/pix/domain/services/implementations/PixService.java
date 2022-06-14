@@ -112,9 +112,8 @@ public class PixService implements IPixService {
                 pixKey.getDatetimeInclusion(),
                 pixKey.getDatetimeInactivation());
 
-        if (pixKeys.size() == 0) {
+        if (pixKeys.size() == 0)
             throw new PixKeyNotFoundException("The given pix key was not found!");
-        }
 
         return pixKeys;
     }
