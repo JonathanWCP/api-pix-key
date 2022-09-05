@@ -26,7 +26,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         return new ResponseEntity(buildResponseMessage(403, ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler(EmptyFieldException.class)
     public ResponseEntity handleValidationException(Exception ex) {
         return new ResponseEntity(buildResponseMessage(422, ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
