@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class ResponseJSONMessage {
-    String id;
+    String statusCode;
+    Object objects;
 }
