@@ -7,13 +7,13 @@ public enum PixKeyType {
     CNPJ("cnpj"),
     RANDOM("aleatorio");
 
-    private String keyType;
+    private final String keyType;
 
     PixKeyType(String keyType) {
         this.keyType = keyType;
     }
 
-    public String getValue() {
+    public String toString() {
         return keyType;
     }
 }

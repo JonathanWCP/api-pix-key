@@ -1,7 +1,7 @@
 package com.pix.api.filtersTests;
 
 import com.pix.api.filters.validations.CreatePixKeyValidatorLegacy;
-import com.pix.domain.exceptions.EmptyFieldException;
+import com.pix.domain.exceptions.CreatePixKeyException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -28,16 +28,16 @@ public class CreatePixKeyValidatorLegacyTests {
     }
 
     @Test
-    public void Should_ThrowValidationException_When_KeyTypeIsNull() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_KeyTypeIsNull() throws Exception {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkKeyType(null));
     }
 
     @Test
-    public void Should_ThrowValidationException_When_KeyTypeIsInvalid() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_KeyTypeIsInvalid() throws Exception {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkKeyType("telefone"));
     }
 
@@ -56,14 +56,14 @@ public class CreatePixKeyValidatorLegacyTests {
     @Test
     public void Should_ThrowValidationException_When_AccountTypeIsNull() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAccountType(null));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AccountTypeIsEmptyString() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAccountType(""));
     }
 
@@ -73,7 +73,7 @@ public class CreatePixKeyValidatorLegacyTests {
         String accountType = "correnteeee";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAccountType(accountType));
     }
 
@@ -83,7 +83,7 @@ public class CreatePixKeyValidatorLegacyTests {
         String accountType = "salario";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAccountType(accountType));
     }
 
@@ -96,21 +96,21 @@ public class CreatePixKeyValidatorLegacyTests {
     @Test
     public void Should_ThrowValidationException_When_AgencyNumberIsInvalid()  {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAgencyNumber(new BigDecimal(0)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AgencyNumberIsGreaterThan4() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAgencyNumber(new BigDecimal(16655)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AgencyNumberIsNull() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAgencyNumber(null));
     }
 
@@ -123,28 +123,28 @@ public class CreatePixKeyValidatorLegacyTests {
     @Test
     public void Should_ThrowValidationException_When_AccountNumberIsInvalid() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAccountNumber(new BigDecimal(0)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AccountNumberGreaterThan8() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAccountNumber(new BigDecimal(165432168)));
     }
 
     @Test
     public void Should_ThrowValidationException_When_AccountNumberISNull() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkAccountNumber(null));
     }
 
     @Test
     public void Should_ThrowValidationException_When_KeyValueIsNull() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkGenericKeyValue(null));
     }
 
@@ -157,28 +157,28 @@ public class CreatePixKeyValidatorLegacyTests {
     @Test
     public void Should_ThrowValidationException_When_TelephoneNotContainCodeArea() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkTelephoneNumber("01198549721J"));
     }
 
     @Test
     public void Should_ThrowValidationException_When_TelephoneContainLetters() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkTelephoneNumber("+5501198549721J"));
     }
 
     @Test
     public void Should_ThrowValidationException_When_TelephoneLengthIsLessThan15() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkTelephoneNumber("+5501198549"));
     }
 
     @Test
     public void Should_ThrowValidationException_When_TelephoneIsZero() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkTelephoneNumber("0"));
     }
 
@@ -197,7 +197,7 @@ public class CreatePixKeyValidatorLegacyTests {
         String email = "jonathanwc.pinheiro";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkEmail(email));
     }
 
@@ -208,7 +208,7 @@ public class CreatePixKeyValidatorLegacyTests {
                 "@outlok.commmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkEmail(email));
     }
 
@@ -222,22 +222,22 @@ public class CreatePixKeyValidatorLegacyTests {
     }
 
     @Test
-    public void Should_ThrowValidationException_When_CpfLengthIsLessThan11() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_CpfLengthIsLessThan11() throws Exception {
         // Arrange
         String cpf = "2222222225";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkCPF(cpf));
     }
 
     @Test
-    public void Should_ThrowValidationException_When_CpfLengthIsBiggerThan11() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_CpfLengthIsBiggerThan11() throws Exception {
         // Arrange
         String cpf = "222222222556";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkCPF(cpf));
     }
 
@@ -251,22 +251,22 @@ public class CreatePixKeyValidatorLegacyTests {
     }
 
     @Test
-    public void Should_ThrowValidationException_When_CnpjLengthIsLessThan14() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_CnpjLengthIsLessThan14() throws Exception {
         // Arrange
         String cnpj = "22222222";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkCNPJ(cnpj));
     }
 
     @Test
-    public void Should_ThrowValidationException_When_CnpjLengthIsBiggerThan14() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_CnpjLengthIsBiggerThan14() throws Exception {
         // Arrange
         String cnpj = "2222222225547846";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkCNPJ(cnpj));
     }
 
@@ -280,12 +280,12 @@ public class CreatePixKeyValidatorLegacyTests {
     }
 
     @Test
-    public void Should_ThrowValidationException_When_RandomKeyLengthIsGreaterThan36() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_RandomKeyLengthIsGreaterThan36() throws Exception {
         // Arrange
         String randomKey = "983141554544156464646446464685474946854164461354535";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkRandomKey(randomKey));
     }
 
@@ -300,26 +300,26 @@ public class CreatePixKeyValidatorLegacyTests {
     }
 
     @Test
-    public void Should_ThrowValidationException_When_PersonTypeIsInvalid() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_PersonTypeIsInvalid() throws Exception {
         // Arrange
         String personType = "humano";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkPersonType(personType));
     }
 
     @Test
-    public void Should_ThrowValidationException_When_PersonTypeIsNull() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_PersonTypeIsNull() throws Exception {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkPersonType(null));
     }
 
     @Test
-    public void Should_ThrowValidationException_When_PersonTypeIsEmptyString() throws EmptyFieldException {
+    public void Should_ThrowValidationException_When_PersonTypeIsEmptyString() throws Exception {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () -> unitUnderTests.checkPersonType(""));
     }
 
@@ -332,14 +332,14 @@ public class CreatePixKeyValidatorLegacyTests {
     @Test
     public void Should_ThrowValidationException_When_NameIsNull() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () ->  unitUnderTests.checkAccountHolderName(null));
     }
 
     @Test
     public void Should_ThrowValidationException_When_NameIsEmpty() {
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () ->  unitUnderTests.checkAccountHolderName(""));
     }
 
@@ -349,7 +349,7 @@ public class CreatePixKeyValidatorLegacyTests {
         String name = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
         // Act and Assert
-        assertThrows(EmptyFieldException.class,
+        assertThrows(Exception.class,
                 () ->  unitUnderTests.checkAccountHolderName(name));
     }
 

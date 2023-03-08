@@ -1,6 +1,5 @@
 package com.pix.api.filters.validations;
 
-import com.pix.domain.exceptions.EmptyFieldException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
