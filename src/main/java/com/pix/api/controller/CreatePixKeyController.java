@@ -1,7 +1,8 @@
 package com.pix.api.controller;
 
 import com.pix.api.ICommandExecutor;
-import com.pix.api.dto.CreatePixKeyDTO;
+import com.pix.api.dto.request.CreatePixKeyRequest;
+import com.pix.api.dto.response.CreatePixKeyResponse;
 import com.pix.api.filters.IPixKeyFilters;
 import com.pix.api.mapper.CreatePixKeyMapper;
 import com.pix.domain.models.PixKey;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class CreatePixKeyController implements ICommandExecutor<CreatePixKeyDTO> {
+public class CreatePixKeyController implements ICommandExecutor<CreatePixKeyRequest> {
 
     @Autowired
     private IPixService pixService;
@@ -25,15 +26,16 @@ public class CreatePixKeyController implements ICommandExecutor<CreatePixKeyDTO>
     @Autowired
     private IPixKeyFilters validator;
 
-    @Override
     @PostMapping(path = "/pix", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> execute(@RequestBody CreatePixKeyDTO createPixKeyDTO) throws Exception {
-        validator.CreatePixKeyValidator(createPixKeyDTO);
+    public ResponseEntity<CreatePixKeyResponse> execute(@RequestBody CreatePixKeyRequest createPixKeyRequest) throws Exception {
+        validator.CreatePixKeyValidator(createPixKeyRequest);
 
-        PixKey pixKey = CreatePixKeyMapper.INSTANCE.createPixKeyDtoToPixKey(createPixKeyDTO);
+        final PixKey pixKey = CreatePixKeyMapper.INSTANCE.createPixKeyRequestToPixKey(createPixKeyRequest);
 
-        String createdPixKey = pixService.CreatePixKey(pixKey);
+        final String createdPixKeyId = pixService.CreatePixKey(pixKey);
 
-        return new ResponseEntity<>(createdPixKey, HttpStatus.CREATED);
+        final CreatePixKeyResponse createPixKeyResponse = new CreatePixKeyResponse(createdPixKeyId);
+
+        return new ResponseEntity<>(createPixKeyResponse, HttpStatus.CREATED);
     }
 }

@@ -1,8 +1,8 @@
 package com.pix.api.controller;
 
 import com.pix.api.ICommandExecutor;
-import com.pix.api.dto.ResponseJSONMessage;
-import com.pix.api.dto.UpdatePixKeyDTO;
+import com.pix.api.dto.request.UpdatePixKeyRequest;
+import com.pix.api.dto.response.UpdatePixKeyResponse;
 import com.pix.api.mapper.UpdatePixKeyMapper;
 import com.pix.domain.models.PixKey;
 import com.pix.domain.services.IPixService;
@@ -17,18 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class UpdatePixKeyController implements ICommandExecutor<UpdatePixKeyDTO> {
+public class UpdatePixKeyController implements ICommandExecutor<UpdatePixKeyRequest> {
 
     @Autowired
     private IPixService pixService;
 
-    @Override
     @PatchMapping(path = "/pix", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PixKey> execute(@RequestBody UpdatePixKeyDTO updatePixKeyDTO) throws Exception {
-        PixKey pixKey = UpdatePixKeyMapper.INSTANCE.UpdatePixKeyDtoToPixKey(updatePixKeyDTO);
+    public ResponseEntity<UpdatePixKeyResponse> execute(@RequestBody UpdatePixKeyRequest updatePixKeyRequest) throws Exception {
+        PixKey pixKey = UpdatePixKeyMapper.INSTANCE.UpdatePixKeyRequestToPixKey(updatePixKeyRequest);
 
         PixKey updatedPixKey = pixService.UpdatePixKey(pixKey);
 
-        return new ResponseEntity<>(updatedPixKey, HttpStatus.OK);
+        UpdatePixKeyResponse updatePixKeyResponse = UpdatePixKeyMapper.INSTANCE.PixKeyToUpdatePixKeyResponse(updatedPixKey);
+
+        return new ResponseEntity<>(updatePixKeyResponse, HttpStatus.OK);
     }
 }

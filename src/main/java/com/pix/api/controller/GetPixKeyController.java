@@ -1,6 +1,8 @@
 package com.pix.api.controller;
 
 import com.pix.api.ICommandExecutor;
+import com.pix.api.dto.response.GetPixKeyResponse;
+import com.pix.api.mapper.GetPixKeyMapper;
 import com.pix.domain.models.PixKey;
 import com.pix.domain.services.IPixService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,12 @@ public class GetPixKeyController implements ICommandExecutor<String> {
     @Autowired
     private IPixService pixService;
 
-    @Override
     @GetMapping(path = "/pix/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PixKey> execute(@PathVariable String id) throws Exception {
-        PixKey response = pixService.GetPixKey(id);
+    public ResponseEntity<GetPixKeyResponse> execute(@PathVariable String id) throws Exception {
+        PixKey pixKey = pixService.GetPixKey(id);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        GetPixKeyResponse getPixKeyResponse = GetPixKeyMapper.INSTANCE.PixKeyToGetPixKeyResponse(pixKey);
+
+        return new ResponseEntity<>(getPixKeyResponse, HttpStatus.OK);
     }
 }

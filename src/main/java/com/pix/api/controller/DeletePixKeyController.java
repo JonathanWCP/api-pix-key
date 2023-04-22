@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -19,11 +16,10 @@ public class DeletePixKeyController implements ICommandExecutor<String> {
     @Autowired
     private IPixService pixService;
 
-    @Override
     @DeleteMapping(path = "/pix/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PixKey> execute(@RequestParam String id) throws Exception {
+    public ResponseEntity<PixKey> execute(@PathVariable String id) throws Exception {
         PixKey removedPixKey = pixService.InactivatePixKey(id);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(removedPixKey, HttpStatus.OK);
     }
 }

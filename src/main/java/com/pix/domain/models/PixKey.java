@@ -1,13 +1,18 @@
 package com.pix.domain.models;
 
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import lombok.Data;
-import java.sql.Date;
-import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import java.math.BigDecimal;
+import java.sql.Date;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "PIX_KEY")
 public class PixKey {

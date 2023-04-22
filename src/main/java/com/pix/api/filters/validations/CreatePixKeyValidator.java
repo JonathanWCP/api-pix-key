@@ -1,7 +1,7 @@
 package com.pix.api.filters.validations;
 
 import br.com.fluentvalidator.AbstractValidator;
-import com.pix.api.dto.CreatePixKeyDTO;
+import com.pix.api.dto.request.CreatePixKeyRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import static br.com.fluentvalidator.predicate.LogicalPredicate.not;
 import static br.com.fluentvalidator.predicate.StringPredicate.*;
 
 @Component
-public class CreatePixKeyValidator extends AbstractValidator<CreatePixKeyDTO> {
+public class CreatePixKeyValidator extends AbstractValidator<CreatePixKeyRequest> {
 
     private static final String STRING_EMPTY_OR_NULL_MESSAGE = "The field should not be empty or null!";
 
@@ -27,15 +27,15 @@ public class CreatePixKeyValidator extends AbstractValidator<CreatePixKeyDTO> {
         acceptedKeyTypes.add("cnpj");
         acceptedKeyTypes.add("aleatorio");
 
-        ruleFor("keyType" ,CreatePixKeyDTO::getKeyType)
+        ruleFor("keyType" , CreatePixKeyRequest::getKeyType)
                 .must(not(stringEmptyOrNull()))
                 .withMessage(STRING_EMPTY_OR_NULL_MESSAGE);
 
-        ruleFor("keyValue" ,CreatePixKeyDTO::getKeyValue)
+        ruleFor("keyValue" , CreatePixKeyRequest::getKeyValue)
                 .must(not(stringEmptyOrNull()))
                 .withMessage(STRING_EMPTY_OR_NULL_MESSAGE);
 
-        ruleFor("accountType" ,CreatePixKeyDTO::getAccountType)
+        ruleFor("accountType" , CreatePixKeyRequest::getAccountType)
                 .must(not(stringEmptyOrNull()))
                 .withMessage(STRING_EMPTY_OR_NULL_MESSAGE);
 
@@ -43,7 +43,7 @@ public class CreatePixKeyValidator extends AbstractValidator<CreatePixKeyDTO> {
 //                .must(not(stringEmptyOrNull()))
 //                .withMessage(STRING_EMPTY_OR_NULL_MESSAGE);
 
-        ruleFor(CreatePixKeyDTO::getKeyType)
+        ruleFor(CreatePixKeyRequest::getKeyType)
                 .must(stringInCollection(acceptedKeyTypes))
                 .withMessage("Invalid key type! It should be celular, email, cpf, cnpj or aleatorio!")
                 .withFieldName("keyType")

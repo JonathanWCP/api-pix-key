@@ -1,18 +1,19 @@
-package com.pix.api.dto;
+package com.pix.api.dto.request;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
-@Data
-public class GetPixKeysFilteredDTO {
+@Getter
+@Setter
+public class GetPixKeysFilteredRequest {
 
     private String keyType;
     private BigDecimal agencyNumber;
     private BigDecimal accountNumber;
     private String accountHolderName;
-    private String accountHolderLastName;
     private Date datetimeInclusion;
     private Date datetimeInactivation;
 

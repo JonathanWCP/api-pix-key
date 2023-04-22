@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PixService implements IPixService {
@@ -41,6 +42,8 @@ public class PixService implements IPixService {
                     throw new PixKeyLimitReachedException("Pix key creation limit is 20 keys for 'juridica' person type");
             }
         }
+
+        pixKey.setId(UUID.randomUUID().toString());
 
         repository.saveAndFlush(pixKey);
         return pixKey.getId();
@@ -94,7 +97,7 @@ public class PixService implements IPixService {
 
         if(pixKey.isPresent())
             if (pixKey.get().getDatetimeInactivation() != null)
-                throw new PixKeyAlreadyDisableException("The given pix key is already disable!");
+                throw new PixKeyAlreadyDisableException("Provided pix key is disabled!");
             else
                 return pixKey.get();
         else {

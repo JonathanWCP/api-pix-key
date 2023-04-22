@@ -1,8 +1,8 @@
 package com.pix.api.filters;
 
-import com.pix.api.dto.CreatePixKeyDTO;
-import com.pix.api.dto.GetPixKeyDTO;
-import com.pix.api.dto.UpdatePixKeyDTO;
+import com.pix.api.dto.request.CreatePixKeyRequest;
+import com.pix.api.dto.request.GetPixKeyRequest;
+import com.pix.api.dto.request.UpdatePixKeyRequest;
 import com.pix.api.filters.validations.CreatePixKeyValidator;
 import com.pix.api.filters.validations.CreatePixKeyValidatorLegacy;
 import com.pix.domain.exceptions.CreatePixKeyException;
@@ -21,38 +21,38 @@ public class PixKeyFilters implements IPixKeyFilters {
     @Autowired
     CreatePixKeyValidator createPixKeyValidator;
 
-    public void Validate(CreatePixKeyDTO createPixKeyDTO) throws Exception {
+    public void Validate(CreatePixKeyRequest createPixKeyRequest) throws Exception {
         final String celularKeyTypeValue = "celular";
         final String emailKeyTypeValue = "email";
         final String cpfKeyTypeValue = "cpf";
         final String cnpjKeyTypeValue = "cnpj";
         final String aleatorioKeyTypeValue = "aleatorio";
 
-        validator.checkGenericKeyValue(createPixKeyDTO.getKeyValue());
-        validator.checkAccountType(createPixKeyDTO.getAccountType());
-        validator.checkAgencyNumber(createPixKeyDTO.getAgencyNumber());
-        validator.checkAccountNumber(createPixKeyDTO.getAccountNumber());
-        validator.checkPersonType(createPixKeyDTO.getPersonType());
+        validator.checkGenericKeyValue(createPixKeyRequest.getKeyValue());
+        validator.checkAccountType(createPixKeyRequest.getAccountType());
+        validator.checkAgencyNumber(createPixKeyRequest.getAgencyNumber());
+        validator.checkAccountNumber(createPixKeyRequest.getAccountNumber());
+        validator.checkPersonType(createPixKeyRequest.getPersonType());
 
-        if (createPixKeyDTO.getKeyType().equals(celularKeyTypeValue))
-            validator.checkTelephoneNumber(createPixKeyDTO.getKeyValue());
+        if (createPixKeyRequest.getKeyType().equals(celularKeyTypeValue))
+            validator.checkTelephoneNumber(createPixKeyRequest.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType().equals(emailKeyTypeValue))
-            validator.checkEmail(createPixKeyDTO.getKeyValue());
+        if (createPixKeyRequest.getKeyType().equals(emailKeyTypeValue))
+            validator.checkEmail(createPixKeyRequest.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType().equals(cpfKeyTypeValue))
-            validator.checkCPF(createPixKeyDTO.getKeyValue());
+        if (createPixKeyRequest.getKeyType().equals(cpfKeyTypeValue))
+            validator.checkCPF(createPixKeyRequest.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType().equals(cnpjKeyTypeValue))
-            validator.checkCNPJ(createPixKeyDTO.getKeyValue());
+        if (createPixKeyRequest.getKeyType().equals(cnpjKeyTypeValue))
+            validator.checkCNPJ(createPixKeyRequest.getKeyValue());
 
-        if (createPixKeyDTO.getKeyType().equals(aleatorioKeyTypeValue))
-            validator.checkRandomKey(createPixKeyDTO.getKeyValue());
+        if (createPixKeyRequest.getKeyType().equals(aleatorioKeyTypeValue))
+            validator.checkRandomKey(createPixKeyRequest.getKeyValue());
     }
 
     @Override
-    public void CreatePixKeyValidator(CreatePixKeyDTO createPixKeyDTO) {
-        createPixKeyValidator.validate(createPixKeyDTO).isInvalidThrow(CreatePixKeyException.class);
+    public void CreatePixKeyValidator(CreatePixKeyRequest createPixKeyRequest) {
+        createPixKeyValidator.validate(createPixKeyRequest).isInvalidThrow(CreatePixKeyException.class);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class PixKeyFilters implements IPixKeyFilters {
     }
 
     @Override
-    public void GetPixKeyValidator(GetPixKeyDTO getPixKeyDTO) {
+    public void GetPixKeyValidator(GetPixKeyRequest getPixKeyRequest) {
 
     }
 
@@ -71,7 +71,7 @@ public class PixKeyFilters implements IPixKeyFilters {
     }
 
     @Override
-    public void UpdatePixKeyValidator(UpdatePixKeyDTO updatePixKeyDTO) {
+    public void UpdatePixKeyValidator(UpdatePixKeyRequest updatePixKeyRequest) {
 
     }
 }
