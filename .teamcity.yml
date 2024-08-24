@@ -1,0 +1,21 @@
+name: Api Pix Key
+jobs:
+  Job1:
+    name: Test
+    steps:
+      - type: maven
+        runner-arguments: ''
+        goals: test
+    runs-on: Linux-Small
+    enable-dependency-cache: true
+    parallelism: 5
+    dependencies:
+      - Job1_2
+  Job1_2:
+    name: Compile
+    runs-on: Linux-Small
+    steps:
+      - type: maven
+        goals: compile
+    enable-dependency-cache: true
+    parallelism: 5
