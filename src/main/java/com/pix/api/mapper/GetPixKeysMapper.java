@@ -1,6 +1,6 @@
 package com.pix.api.mapper;
 
-import com.pix.api.dto.request.GetPixKeysFilteredRequest;
+import com.pix.api.dto.request.GetPixKeysRequest;
 import com.pix.api.dto.response.GetPixKeyResponse;
 import com.pix.domain.models.PixKey;
 import org.mapstruct.Mapper;
@@ -10,9 +10,9 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper
-public interface GetPixKeyFilteredMapper {
+public interface GetPixKeysMapper {
 
-    GetPixKeyFilteredMapper INSTANCE = Mappers.getMapper(GetPixKeyFilteredMapper.class);
+    GetPixKeysMapper INSTANCE = Mappers.getMapper(GetPixKeysMapper.class);
 
     @Mapping(target = "personType", ignore = true)
     @Mapping(target = "keyValue", ignore = true)
@@ -25,8 +25,8 @@ public interface GetPixKeyFilteredMapper {
     @Mapping(source = "accountHolderName", target = "accountHolderName")
     @Mapping(source = "datetimeInclusion", target = "datetimeInclusion")
     @Mapping(source = "datetimeInactivation", target = "datetimeInactivation")
-    PixKey getPixKeyFilteredToPixKey(GetPixKeysFilteredRequest getPixKeysFilteredDTO);
+    PixKey getPixKeyFilteredToPixKey(GetPixKeysRequest getPixKeysFilteredDTO);
 
-    List<GetPixKeyResponse> MapPixKeyListToGetPixKeyResponseList(List<PixKey> pixKeys);
+    List<GetPixKeyResponse> toResponse(List<PixKey> pixKeys);
 
 }

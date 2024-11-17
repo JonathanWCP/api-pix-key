@@ -27,15 +27,15 @@ public class CreatePixKeyValidator extends AbstractValidator<CreatePixKeyRequest
         acceptedKeyTypes.add("cnpj");
         acceptedKeyTypes.add("aleatorio");
 
-        ruleFor("keyType" , CreatePixKeyRequest::getKeyType)
+        ruleFor("keyType" , CreatePixKeyRequest::keyType)
                 .must(not(stringEmptyOrNull()))
                 .withMessage(STRING_EMPTY_OR_NULL_MESSAGE);
 
-        ruleFor("keyValue" , CreatePixKeyRequest::getKeyValue)
+        ruleFor("keyValue" , CreatePixKeyRequest::keyValue)
                 .must(not(stringEmptyOrNull()))
                 .withMessage(STRING_EMPTY_OR_NULL_MESSAGE);
 
-        ruleFor("accountType" , CreatePixKeyRequest::getAccountType)
+        ruleFor("accountType" , CreatePixKeyRequest::accountType)
                 .must(not(stringEmptyOrNull()))
                 .withMessage(STRING_EMPTY_OR_NULL_MESSAGE);
 
@@ -43,7 +43,7 @@ public class CreatePixKeyValidator extends AbstractValidator<CreatePixKeyRequest
 //                .must(not(stringEmptyOrNull()))
 //                .withMessage(STRING_EMPTY_OR_NULL_MESSAGE);
 
-        ruleFor(CreatePixKeyRequest::getKeyType)
+        ruleFor(CreatePixKeyRequest::keyType)
                 .must(stringInCollection(acceptedKeyTypes))
                 .withMessage("Invalid key type! It should be celular, email, cpf, cnpj or aleatorio!")
                 .withFieldName("keyType")

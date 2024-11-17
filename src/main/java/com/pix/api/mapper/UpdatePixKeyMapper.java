@@ -13,5 +13,5 @@ public interface UpdatePixKeyMapper {
 
     PixKey UpdatePixKeyRequestToPixKey(UpdatePixKeyRequest updatePixKeyRequest);
 
-    UpdatePixKeyResponse PixKeyToUpdatePixKeyResponse(PixKey pixKey);
+    UpdatePixKeyResponse toResponse(PixKey pixKey);
 }

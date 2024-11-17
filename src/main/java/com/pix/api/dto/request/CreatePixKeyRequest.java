@@ -1,21 +1,27 @@
 package com.pix.api.dto.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.pix.api.dto.validation.annotation.KeyType;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-public class CreatePixKeyRequest {
+public record CreatePixKeyRequest(
 
-    private String keyType;
-    private String keyValue;
-    private BigDecimal agencyNumber;
-    private String accountType;
-    private BigDecimal accountNumber;
-    private String accountHolderName;
-    private String accountHolderLastName;
-    private String personType;
+        @NotBlank(message = "Key type must not be null!")
+        @KeyType(value = {"celular", "email", "cpf", "cnpj", "aleatorio"}, message = "Invalid Key type! Must be 'celular', 'email', 'cpf', 'cnpj' or 'aleatorio'")
+        String keyType,
 
+        String keyValue,
+
+        BigDecimal agencyNumber,
+
+        String accountType,
+
+        BigDecimal accountNumber,
+
+        String accountHolderName,
+
+        String accountHolderLastName,
+
+        String personType) {
 }

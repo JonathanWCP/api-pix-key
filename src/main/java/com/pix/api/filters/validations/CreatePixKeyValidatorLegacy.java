@@ -7,14 +7,14 @@ import java.math.BigDecimal;
 @Component
 public class CreatePixKeyValidatorLegacy {
 
-    public void checkKeyType(String keyType) throws Exception {
-        if (stringIsNullOrEmpty(keyType))
-            throw new Exception("Key type must not be null!");
-
-        if (!keyType.equals("celular") && !keyType.equals("email") && !keyType.equals("cpf")
-                && !keyType.equals("cnpj") && !keyType.equals("aleatorio"))
-            throw new Exception("Invalid Key type! Must be 'celular', 'email', 'cpf', 'cnpj' or 'aleatorio'");
-    }
+//    public void checkKeyType(String keyType) throws Exception {
+//        if (stringIsNullOrEmpty(keyType))
+//            throw new Exception("Key type must not be null!");
+//
+//        if (!keyType.equals("celular") && !keyType.equals("email") && !keyType.equals("cpf")
+//                && !keyType.equals("cnpj") && !keyType.equals("aleatorio"))
+//            throw new Exception("Invalid Key type! Must be 'celular', 'email', 'cpf', 'cnpj' or 'aleatorio'");
+//    }
 
     public void checkAccountType(String accountType) throws Exception {
         if (stringIsNullOrEmpty(accountType))

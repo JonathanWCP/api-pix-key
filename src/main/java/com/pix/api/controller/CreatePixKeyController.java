@@ -1,33 +1,30 @@
 package com.pix.api.controller;
 
-import com.pix.api.ICommandExecutor;
 import com.pix.api.dto.request.CreatePixKeyRequest;
 import com.pix.api.dto.response.CreatePixKeyResponse;
-import com.pix.api.filters.IPixKeyFilters;
+import com.pix.api.filters.PixKeyFilters;
 import com.pix.api.mapper.CreatePixKeyMapper;
+import com.pix.domain.entrypoint.CreatePixKeyEntryPoint;
+import com.pix.domain.exceptions.PixKeyAlreadyExistsException;
+import com.pix.domain.exceptions.PixKeyLimitReachedException;
 import com.pix.domain.models.PixKey;
-import com.pix.domain.services.IPixService;
+import com.pix.domain.services.PixService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
-public class CreatePixKeyController implements ICommandExecutor<CreatePixKeyRequest> {
+public class CreatePixKeyController implements CreatePixKeyEntryPoint {
 
     @Autowired
-    private IPixService pixService;
+    private PixService pixService;
 
     @Autowired
-    private IPixKeyFilters validator;
+    private PixKeyFilters validator;
 
-    @PostMapping(path = "/pix", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CreatePixKeyResponse> execute(@RequestBody CreatePixKeyRequest createPixKeyRequest) throws Exception {
+    @Override
+    public ResponseEntity<CreatePixKeyResponse> create(CreatePixKeyRequest createPixKeyRequest) throws PixKeyLimitReachedException, PixKeyAlreadyExistsException {
         validator.CreatePixKeyValidator(createPixKeyRequest);
 
         final PixKey pixKey = CreatePixKeyMapper.INSTANCE.createPixKeyRequestToPixKey(createPixKeyRequest);
